@@ -1,0 +1,95 @@
+{
+  "$schema": "https://app.flightcontrol.dev/schema.json",
+  "environments": [
+    {
+      "id": "production",
+      "name": "Production",
+      "region": "us-west-2",
+      "source": {
+        "branch": "main"
+      },
+      "services": [
+        {
+          "id": "app",
+          "name": "somosgodines.com",
+          "type": "fargate",
+          "cpu": 0.25,
+          "memory": 0.5,
+          "domain": "somosgodines.com",
+          "minInstances": 1,
+          "maxInstances": 1,
+          "buildCommand": "npm run build",
+          "startCommand": "npm run start",
+          "port": 3000,
+          "dependsOn": ["db"],
+          "envVariables": {
+            "NODE_ENV": "production",
+            "NEXTAUTH_SECRET": {"fromParameterStore": "fc.somosgodinescom.env.production.czif04f3.NEXTAUTH_SECRET"},
+            "NEXTAUTH_URL": "https://somosgodines.com",
+            "DATABASE_URL": {
+              "fromService": {
+                "id": "db",
+                "value": "dbConnectionString"
+              }
+            }
+          }
+        },
+        {
+          "id": "db",
+          "name": "Database",
+          "type": "rds",
+          "engine": "postgres",
+          "engineVersion": "13",
+          "instanceSize": "db.t4g.micro",
+          "storage": 20,
+          "private": false
+        }
+      ]
+    },
+    {
+      "id": "preview",
+      "name": "Preview Environment",
+      "region": "us-west-2",
+      "source": {
+        "branch": "main"
+      },
+      "services": [
+        {
+          "id": "app",
+          "name": "preview.somosgodines.com",
+          "type": "fargate",
+          "cpu": 0.25,
+          "memory": 0.5,
+          "domain": "*.somosgodines.com",
+          "minInstances": 1,
+          "maxInstances": 1,
+          "buildCommand": "npm run build",
+          "startCommand": "npm run start",
+          "port": 3000,
+          "dependsOn": ["db"],
+          "envVariables": {
+            "NEXTAUTH_SECRET": {"fromParameterStore": "NEXTAUTH_SECRET"},
+            "NEXTAUTH_URL": {"fromParameterStore": "NEXTAUTH_URL"},
+            "NODE_ENV": "production",
+            "DATABASE_URL": {
+              "fromService": {
+                "id": "db",
+                "value": "dbConnectionString"
+              }
+            }
+          }
+        },
+        {
+          "id": "db",
+          "name": "Database",
+          "type": "rds",
+          "engine": "postgres",
+          "engineVersion": "13",
+          "instanceSize": "db.t4g.micro",
+          "storage": 20,
+          "private": false
+        }
+      ]
+    }
+  ]
+}
