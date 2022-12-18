@@ -51,7 +51,11 @@
       "name": "Preview Environment",
       "region": "us-west-2",
       "source": {
-        "branch": "main"
+        "pr": true,
+        "filter":  {
+          "labels": ["preview"],
+          "toBranches": ["main"]
+        }
       },
       "services": [
         {
