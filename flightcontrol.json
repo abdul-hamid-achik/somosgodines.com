@@ -15,7 +15,7 @@
           "type": "fargate",
           "cpu": 0.25,
           "memory": 0.5,
-          "domain": "somosgodines.com",
+          "domain": "www.somosgodines.com",
           "minInstances": 1,
           "maxInstances": 1,
           "buildCommand": "npm run build",
@@ -25,7 +25,7 @@
           "envVariables": {
             "NODE_ENV": "production",
             "NEXTAUTH_SECRET": {"fromParameterStore": "fc.somosgodinescom.env.production.czif04f3.NEXTAUTH_SECRET"},
-            "NEXTAUTH_URL": "https://somosgodines.com",
+            "NEXTAUTH_URL": "https://www.somosgodines.com",
             "DATABASE_URL": {
               "fromService": {
                 "id": "db",
